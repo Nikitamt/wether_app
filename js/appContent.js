@@ -29,7 +29,7 @@ export const createContent = (data) => {
     weatherInfoClouds.classList.add('weather-info__item');
 
     temperature.textContent = Math.floor(data.main.temp);
-    description.textContent = capitalizeFirstLetter(data.weather[0].description);
+    description.textContent = data.weather[0].description;
     iconBloc.src = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`;
     units.textContent = 'o';
 
