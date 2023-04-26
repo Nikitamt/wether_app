@@ -1,4 +1,6 @@
+import { getWeatherData } from "./api.js";
 import { handleWeatherByGeolocation } from "./geolocation.js";
+import { resetWeatherContent } from "./helper.js";
 
 export const createHeader = (city) => {
     const header = document.createElement('header');
@@ -37,7 +39,38 @@ export const createHeader = (city) => {
     cityLocation.textContent = 'Мое местоположение';
     unitsC.textContent = 'C';
     unitsF.textContent = 'F';
+
+    cityChange.addEventListener('click', () => {
+            headerCity.innerHTML = '';
+            searchBlock.append(searchInput, searchBtn, errorBlock);
+            headerCity.append(searchBlock);
+    });
+
+    const showError = (message) => {
+        errorBlock.classList.add('show-error');
+        errorBlock.textContent = message;
+    }
     
+    searchBtn.addEventListener('click', async () =>{
+        if(!searchInput.value){
+            return;
+        }
+
+        try {
+            const weather = await getWeatherData(searchInput.value);
+            
+            if(weather.message){
+                showError(weather.message);
+                return;     // чтобы код перестал выполняться
+            }
+
+            resetWeatherContent(weather.name, weather);
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+
     cityLocation.addEventListener('click', handleWeatherByGeolocation);
     
     header.append(headerContainer);
