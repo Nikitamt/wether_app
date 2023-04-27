@@ -18,6 +18,15 @@ export const capitalizeFirstLetter = (string) => {
 }
 
 
+export const cToF = (celsius) => {
+    return celsius * 9 / 5 + 32;
+}
+
+export const fToC = (fahrenheit) => {
+    return (fahrenheit - 32) * 5 / 9;
+}
+
+
 export const resetWeatherContent = (city, weather) => {
     localStorage.setItem('city', JSON.stringify(city));     // записываем город в локальную память 
     document.body.innerHTML = '';

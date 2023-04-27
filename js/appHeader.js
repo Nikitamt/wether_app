@@ -1,6 +1,6 @@
 import { getWeatherData } from "./api.js";
 import { handleWeatherByGeolocation } from "./geolocation.js";
-import { resetWeatherContent } from "./helper.js";
+import { cToF, fToC, resetWeatherContent } from "./helper.js";
 
 export const createHeader = (city) => {
     const header = document.createElement('header');
@@ -67,6 +67,45 @@ export const createHeader = (city) => {
             resetWeatherContent(weather.name, weather);
         } catch (error) {
             console.log(error);
+        }
+    });
+
+    unitsC.addEventListener('click', () => {
+        if(unitsC.classList.contains('unit-current')) {
+            return;
+        }
+
+        unitsC.classList.add('unit-current');
+        unitsF.classList.remove('unit-current');
+        document.querySelector('.weather__units').textContent = 'o';
+
+        const temperature = document.querySelector('.weather__temperature');
+        const convertedTemp = fToC(+temperature.textContent);   // + для того, чтобы была не строка, а число
+        temperature.textContent = Math.round(convertedTemp);
+    });
+
+    unitsF.addEventListener('click', () => {
+        if(unitsF.classList.contains('unit-current')) {
+            return;
+        }
+
+        unitsF.classList.add('unit-current');
+        unitsC.classList.remove('unit-current');
+        document.querySelector('.weather__units').textContent = 'f';
+
+        const temperature = document.querySelector('.weather__temperature');
+        const convertedTemp = cToF(+temperature.textContent);   // + для того, чтобы была не строка, а число
+        temperature.textContent = Math.round(convertedTemp);
+    });
+
+    window.addEventListener('click', (e) => {
+        if(e.target == searchInput || e.target == searchBtn || e.target == cityChange){
+            return;
+        } else {
+            headerCity.innerHTML = '';
+            errorBlock.classList.remove('show-error');
+            searchInput.value = '';
+            headerCity.append(cityName, cityInner);
         }
     });
 
